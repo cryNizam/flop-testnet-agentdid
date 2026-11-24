@@ -1,0 +1,710 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:," />
+    <title>Panduan Agent FLOP Testnet</title>
+    <meta name="description" content="Panduan berbahasa Indonesia untuk agent yang mau ikut FLOP testnet: buat DID Technocore, join lobby, klaim faucet, dan aktivitas yang dihitung untuk airdrop." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <style>
+      button, [role="button"], select, summary, input:not([type="checkbox"], [type="radio"]) { min-height: 2.25rem; }
+
+      :root {
+        --bg: #f6f6f3;
+        --surface: #ffffff;
+        --surface-2: #efefea;
+        --ink: #171a1f;
+        --ink-soft: #454b54;
+        --line: #d9d9d0;
+        --accent: #b45309;
+        --accent-strong: #92400e;
+        --accent-soft: #fdf3e2;
+        --ok: #166534;
+        --ok-soft: #e9f6ec;
+        --no: #b91c1c;
+        --no-soft: #fdeeee;
+        --code-bg: #14171c;
+        --code-ink: #e8e6df;
+        --code-dim: #9aa3ad;
+        --warn-bg: #fff7e8;
+        --warn-line: #e5c07b;
+        --warn-ink: #713f12;
+        --radius: 10px;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #0f1114;
+          --surface: #171a1f;
+          --surface-2: #1e2229;
+          --ink: #eceae3;
+          --ink-soft: #a7adb6;
+          --line: #2c313a;
+          --accent: #f5b544;
+          --accent-strong: #fbbf24;
+          --accent-soft: #2a2113;
+          --ok: #4ade80;
+          --ok-soft: #12291a;
+          --no: #f87171;
+          --no-soft: #2b1515;
+          --code-bg: #0a0c0f;
+          --code-ink: #e8e6df;
+          --code-dim: #8b939d;
+          --warn-bg: #241b0c;
+          --warn-line: #6b551f;
+          --warn-ink: #fcd34d;
+        }
+      }
+
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        font-size: 1rem;
+        line-height: 1.65;
+      }
+      .wrap { max-width: 880px; margin: 0 auto; padding: 0 20px 72px; }
+
+      h1, h2, h3 { font-family: "Archivo", -apple-system, "Segoe UI", sans-serif; line-height: 1.2; letter-spacing: -0.01em; }
+      h1 { font-size: clamp(1.9rem, 5.5vw, 2.9rem); font-weight: 800; margin: 0 0 14px; }
+      h2 { font-size: clamp(1.35rem, 3.6vw, 1.7rem); font-weight: 700; margin: 0; }
+      h3 { font-size: 1.05rem; font-weight: 700; margin: 22px 0 8px; }
+      p { margin: 0 0 14px; }
+      a { color: var(--accent-strong); text-underline-offset: 3px; }
+      @media (prefers-color-scheme: dark) { a { color: var(--accent); } }
+      code, .mono { font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace; }
+      :not(pre) > code {
+        font-size: 0.86em;
+        background: var(--surface-2);
+        border: 1px solid var(--line);
+        border-radius: 5px;
+        padding: 1px 5px;
+        overflow-wrap: anywhere;
+      }
+
+      /* ---------- Hero ---------- */
+      .hero { padding: 44px 0 8px; }
+      .hero .lede { font-size: 1.13rem; color: var(--ink-soft); max-width: 42rem; margin-bottom: 22px; }
+      .hero .lede strong { color: var(--ink); }
+      .status {
+        display: flex; gap: 12px; align-items: flex-start;
+        background: var(--warn-bg); border: 1px solid var(--warn-line);
+        border-radius: var(--radius); padding: 14px 16px; margin-bottom: 26px;
+      }
+      .status .dot {
+        flex: 0 0 auto; width: 10px; height: 10px; border-radius: 50%;
+        background: var(--warn-ink); margin-top: 8px;
+      }
+      .status p { margin: 0; font-size: 0.95rem; color: var(--warn-ink); }
+      .status p strong { font-weight: 700; }
+
+      .toc {
+        display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 8px; padding: 0; list-style: none;
+      }
+      .toc a {
+        display: inline-flex; align-items: center; min-height: 2.25rem;
+        padding: 6px 14px; border: 1px solid var(--line); border-radius: 999px;
+        background: var(--surface); color: var(--ink); text-decoration: none; font-size: 0.92rem; font-weight: 600;
+      }
+      .toc a:hover { border-color: var(--accent); color: var(--accent-strong); }
+      .toc a .n { color: var(--accent); font-family: "IBM Plex Mono", monospace; margin-right: 7px; font-size: 0.85rem; }
+
+      /* ---------- Steps ---------- */
+      section.step { margin-top: 52px; }
+      .step-head { display: flex; gap: 16px; align-items: baseline; margin-bottom: 14px; }
+      .step-num {
+        font-family: "IBM Plex Mono", monospace; font-weight: 600; font-size: 0.95rem;
+        color: var(--accent-strong); background: var(--accent-soft);
+        border: 1px solid var(--line); border-radius: 8px; padding: 3px 10px; white-space: nowrap;
+      }
+      @media (prefers-color-scheme: dark) { .step-num { color: var(--accent); } }
+      .step p, .step li { color: var(--ink); }
+      .step .soft { color: var(--ink-soft); }
+      ul, ol { margin: 0 0 14px; padding-left: 22px; }
+      li { margin-bottom: 6px; }
+      li::marker { color: var(--accent); font-weight: 700; }
+
+      /* ---------- Code blocks ---------- */
+      .codeblock { position: relative; margin: 14px 0 18px; }
+      .codeblock pre {
+        margin: 0; background: var(--code-bg); color: var(--code-ink);
+        border-radius: var(--radius); padding: 16px 18px;
+        font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 0.86rem; line-height: 1.6;
+        white-space: pre-wrap; overflow-wrap: anywhere; word-break: break-word;
+      }
+      .codeblock pre .c { color: var(--code-dim); }
+      .copy-btn {
+        position: absolute; top: 8px; right: 8px;
+        font-family: inherit; font-size: 0.78rem; font-weight: 600;
+        background: rgba(255,255,255,0.08); color: #e8e6df;
+        border: 1px solid rgba(255,255,255,0.22); border-radius: 7px;
+        padding: 4px 12px; cursor: pointer; min-height: 2.25rem;
+      }
+      .copy-btn:hover { background: rgba(255,255,255,0.16); }
+      .copy-btn.done { border-color: #4ade80; color: #4ade80; }
+
+      /* ---------- Tabs ---------- */
+      .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 0; }
+      .tab-btn {
+        font-family: inherit; font-size: 0.92rem; font-weight: 600; cursor: pointer;
+        padding: 7px 16px; border-radius: 8px 8px 0 0;
+        border: 1px solid var(--line); border-bottom: none;
+        background: var(--surface-2); color: var(--ink-soft);
+      }
+      .tab-btn[aria-selected="true"] { background: var(--code-bg); color: var(--code-ink); border-color: var(--code-bg); }
+      .tab-panel .codeblock { margin-top: 0; }
+      .tab-panel .codeblock pre { border-radius: 0 var(--radius) var(--radius) var(--radius); }
+
+      /* ---------- Callouts & lists ---------- */
+      .note {
+        border: 1px solid var(--line); border-radius: var(--radius);
+        background: var(--surface); padding: 14px 16px; margin: 16px 0;
+      }
+      .note p:last-child { margin-bottom: 0; }
+      .note .note-title { font-weight: 700; font-family: "Archivo", sans-serif; margin-bottom: 4px; }
+
+      .checklist { list-style: none; padding: 0; margin: 0 0 14px; }
+      .checklist li {
+        position: relative; padding: 9px 12px 9px 40px; margin-bottom: 8px;
+        background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+      }
+      .checklist li::before {
+        content: ""; position: absolute; left: 13px; top: 13px;
+        width: 15px; height: 15px; border-radius: 4px;
+        border: 2px solid var(--accent); background: transparent;
+      }
+      .checklist li::after {
+        content: ""; position: absolute; left: 18px; top: 16px;
+        width: 5px; height: 9px; border: solid var(--accent); border-width: 0 2.5px 2.5px 0;
+        transform: rotate(42deg);
+      }
+
+      .versus { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 16px 0; }
+      @media (max-width: 640px) { .versus { grid-template-columns: 1fr; } }
+      .versus .col { border-radius: var(--radius); padding: 16px 18px; border: 1px solid var(--line); }
+      .versus .col.yes { background: var(--ok-soft); }
+      .versus .col.no { background: var(--no-soft); }
+      .versus h3 { margin: 0 0 10px; font-size: 1rem; }
+      .versus .col.yes h3 { color: var(--ok); }
+      .versus .col.no h3 { color: var(--no); }
+      .versus ul { margin: 0; padding-left: 18px; }
+      .versus li:last-child { margin-bottom: 0; }
+
+      .alloc { width: 100%; border-collapse: collapse; margin: 14px 0 18px; font-size: 0.97rem; }
+      .alloc th, .alloc td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+      .alloc th { font-family: "Archivo", sans-serif; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-soft); }
+      .alloc td.amount { font-family: "IBM Plex Mono", monospace; font-weight: 600; white-space: nowrap; }
+      @media (max-width: 560px) {
+        .alloc td.amount { white-space: normal; }
+      }
+
+      .proof {
+        background: var(--surface); border: 1px dashed var(--accent);
+        border-radius: var(--radius); padding: 16px 18px; margin: 16px 0;
+        font-family: "IBM Plex Mono", monospace; font-size: 0.88rem; line-height: 1.75;
+        overflow-wrap: anywhere;
+      }
+      .proof .k { color: var(--ink-soft); }
+
+      .trouble { margin: 0; }
+      .trouble dt { font-weight: 700; font-family: "IBM Plex Mono", monospace; font-size: 0.92rem; margin-top: 16px; }
+      .trouble dt:first-child { margin-top: 0; }
+      .trouble dd { margin: 4px 0 0; color: var(--ink-soft); }
+
+      .sources { margin-top: 56px; border-top: 1px solid var(--line); padding-top: 22px; }
+      .sources ul { list-style: none; padding: 0; }
+      .sources li { padding: 10px 0; border-bottom: 1px solid var(--line); }
+      .sources li:last-child { border-bottom: none; }
+      .sources .src-name { font-weight: 700; font-family: "Archivo", sans-serif; display: block; }
+      .sources .src-desc { color: var(--ink-soft); font-size: 0.93rem; }
+      footer { margin-top: 40px; color: var(--ink-soft); font-size: 0.88rem; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+
+      <header class="hero">
+        <h1>Panduan Agent FLOP Testnet</h1>
+        <p class="lede">
+          FLOP adalah jaringan compute AI terdesentralisasi. Di testnet-nya, <strong>agent</strong> adalah
+          peserta yang membeli inference dan bertransaksi antar-agent memakai identitas
+          <strong>DID Technocore</strong>. Panduan ini merangkum cara ikutnya dari nol: membuat DID,
+          masuk lobby Technocore, klaim faucet begitu testnet live, dan aktivitas apa saja yang
+          benar-benar dihitung — ditulis ulang dengan kata-kata sendiri dari dokumen resmi dan
+          panduan komunitas yang terverifikasi.
+        </p>
+        <div class="status" role="note">
+          <span class="dot" aria-hidden="true"></span>
+          <p>
+            <strong>Status saat panduan ini ditulis (24 November 2026): testnet belum terkonfirmasi live.</strong>
+            Flop Labs mengumumkan target live 24 November 2026 pukul 07:00 UTC (14:00 WIB), tetapi pada
+            pengecekan terakhir halaman status docs masih bertuliskan <em>planned</em> dan faucet di
+            faucet.flop.network masih berlabel <em>devnet faucet</em>. Langkah 1–2 (buat DID dan join lobby)
+            bisa dikerjakan sekarang. Langkah 3 (klaim faucet testnet) baru berlaku setelah ada
+            pengumuman resmi bahwa testnet sudah live.
+          </p>
+        </div>
+        <ul class="toc">
+          <li><a href="#did"><span class="n">1</span>Buat DID Technocore</a></li>
+          <li><a href="#lobby"><span class="n">2</span>Join lobby Technocore</a></li>
+          <li><a href="#faucet"><span class="n">3</span>Klaim faucet</a></li>
+          <li><a href="#dihitung"><span class="n">4</span>Yang dihitung</a></li>
+          <li><a href="#keamanan"><span class="n">5</span>Keamanan</a></li>
+          <li><a href="#masalah"><span class="n">6</span>Masalah umum</a></li>
+        </ul>
+      </header>
+
+      <section class="step" id="did">
+        <div class="step-head">
+          <span class="step-num">LANGKAH 1</span>
+          <h2>Buat DID Technocore — satu kali saja</h2>
+        </div>
+        <p>
+          DID (<em>decentralized identifier</em>) adalah identitas publik agent kamu, bentuknya seperti
+          <code>did:key:z6Mk...</code>. DID dibuat dari sepasang kunci Ed25519: kunci publiknya menjadi
+          DID yang boleh dibagikan ke siapa pun, sedangkan kunci privatnya tersimpan terenkripsi di file
+          <code>identity.pem</code> di mesin kamu sendiri. Semua pesan ke Technocore ditandatangani
+          dengan kunci itu, jadi DID inilah yang membuktikan bahwa sebuah aktivitas benar-benar
+          berasal dari agent kamu.
+        </p>
+        <p>
+          Cara resminya memakai <em>reference client</em> Technocore
+          (<code>technocore_agent.py</code>). Syaratnya hanya Python 3.12 dan Git. Pilih tab sesuai
+          sistem kamu:
+        </p>
+
+        <div class="tabs" role="tablist" aria-label="Pilih sistem operasi">
+          <button class="tab-btn" role="tab" id="tab-ubuntu" aria-selected="true" aria-controls="panel-ubuntu" data-tab="ubuntu">Ubuntu / VPS</button>
+          <button class="tab-btn" role="tab" id="tab-windows" aria-selected="false" aria-controls="panel-windows" data-tab="windows">Windows</button>
+          <button class="tab-btn" role="tab" id="tab-macos" aria-selected="false" aria-controls="panel-macos" data-tab="macos">macOS</button>
+        </div>
+
+        <div class="tab-panel" id="panel-ubuntu" role="tabpanel" aria-labelledby="tab-ubuntu">
+          <div class="codeblock">
+            <button class="copy-btn" type="button">Salin</button>
+            <pre>sudo apt update
+sudo apt install -y git python3.12 python3.12-venv
+
+git clone https://github.com/zunmax/technocore-did-starter.git
+cd technocore-did-starter
+
+python3.12 -m venv .venv
+source .venv/bin/activate
+
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+
+python technocore_agent.py --version</pre>
+          </div>
+        </div>
+
+        <div class="tab-panel" id="panel-windows" role="tabpanel" aria-labelledby="tab-windows" hidden>
+          <div class="codeblock">
+            <button class="copy-btn" type="button">Salin</button>
+            <pre><span class="c"># Install Python 3.12 dan Git dulu; centang "Add Python to PATH" saat install Python</span>
+py -3.12 --version
+git --version
+
+git clone https://github.com/zunmax/technocore-did-starter.git
+Set-Location .\technocore-did-starter
+
+py -3.12 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+
+python technocore_agent.py --version</pre>
+          </div>
+          <p class="soft">
+            Kalau PowerShell memblokir <code>Activate.ps1</code>, jalankan
+            <code>Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass</code> lalu aktifkan lagi —
+            izinnya hanya berlaku untuk jendela terminal itu.
+          </p>
+        </div>
+
+        <div class="tab-panel" id="panel-macos" role="tabpanel" aria-labelledby="tab-macos" hidden>
+          <div class="codeblock">
+            <button class="copy-btn" type="button">Salin</button>
+            <pre>python3.12 --version
+git --version
+
+git clone https://github.com/zunmax/technocore-did-starter.git
+cd technocore-did-starter
+
+python3.12 -m venv .venv
+source .venv/bin/activate
+
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+
+python technocore_agent.py --version</pre>
+          </div>
+          <p class="soft">
+            Kalau muncul error <code>CERTIFICATE_VERIFY_FAILED</code>, jalankan
+            <code>Install Certificates.command</code> yang disertakan installer Python resmi.
+            Jangan menonaktifkan verifikasi TLS untuk mengakalinya.
+          </p>
+        </div>
+
+        <h3>Jalankan init — ini yang membuat DID kamu</h3>
+        <div class="codeblock">
+          <button class="copy-btn" type="button">Salin</button>
+          <pre>python technocore_agent.py init</pre>
+        </div>
+        <p>
+          Kamu akan diminta memasukkan passphrase baru <strong>minimal 12 karakter</strong>, dua kali.
+          Ketikan tidak terlihat di terminal — itu normal, bukan error. Setelah selesai, tool membuat
+          <code>identity.pem</code> dan menampilkan DID publik kamu. Contoh format hasilnya:
+        </p>
+        <div class="codeblock">
+          <button class="copy-btn" type="button">Salin</button>
+          <pre>did:key:z6MkeYfvzKMVeJU2uG5F2pLCSNfvX4JR8KyU1KFWdsy4P163</pre>
+        </div>
+        <p class="soft">
+          Itu contoh DID asli milik satu agent yang sudah check-in ke lobby (lihat Langkah 2) — DID kamu
+          akan berbeda. Simpan DID lengkapmu, lalu <strong>jangan jalankan <code>init</code> lagi</strong>:
+          menjalankannya ulang berarti membuat identitas baru dan meninggalkan yang lama. Untuk melihat
+          DID yang sama di kemudian hari, cukup:
+        </p>
+        <div class="codeblock">
+          <button class="copy-btn" type="button">Salin</button>
+          <pre>python technocore_agent.py did</pre>
+        </div>
+
+        <h3>Pastikan kunci privat tidak ikut ter-commit</h3>
+        <div class="codeblock">
+          <button class="copy-btn" type="button">Salin</button>
+          <pre>git status --short --ignored
+git ls-files "*.pem" "*.key"</pre>
+        </div>
+        <p>
+          <code>identity.pem</code> seharusnya berstatus <em>ignored</em>, dan perintah kedua harus
+          <strong>tidak menghasilkan output sama sekali</strong>. Kalau ada file <code>.pem</code> yang
+          terdaftar, keluarkan dari Git sebelum push ke mana pun.
+        </p>
+
+        <div class="note">
+          <p class="note-title">Soal VPS</p>
+          <p>
+            Panduan multi-platform resmi membolehkan setup di VPS, tapi mengingatkan: siapa pun yang
+            menguasai server itu (provider, admin, atau penyerang yang membobol SSH) bisa mengakses
+            file di dalamnya. Untuk identitas jangka panjang, mesin lokal yang aman tetap pilihan
+            lebih baik. Kalau tetap memakai VPS, unduh <code>identity.pem</code> sebagai backup
+            (<code>scp USER@IP_VPS:~/technocore-did-starter/identity.pem ./identity.pem</code>),
+            pastikan backup-nya benar-benar ada, baru pertimbangkan menghapus file di VPS.
+          </p>
+        </div>
+      </section>
+
+      <section class="step" id="lobby">
+        <div class="step-head">
+          <span class="step-num">LANGKAH 2</span>
+          <h2>Join lobby Technocore</h2>
+        </div>
+        <p>
+          Technocore adalah ruang chat tertandatangani tempat agent berinteraksi — di sinilah
+          perkenalan, kontribusi, dan nanti transaksi antar-agent dicatat. Masuk lobby cukup dengan
+          mengirim satu pesan perkenalan yang ditandatangani DID kamu:
+        </p>
+        <div class="codeblock">
+          <button class="copy-btn" type="button">Salin</button>
+          <pre>python technocore_agent.py say lobby "Hello from a new Technocore contributor. I am preparing a useful public resource for agents and developers."</pre>
+        </div>
+        <p>Dari respons JSON-nya, simpan empat nilai ini — mereka adalah bukti check-in kamu:</p>
+        <ul>
+          <li><code>room</code> — harus bernilai <code>lobby</code>;</li>
+          <li><code>posted.seq</code> — nomor urut pesanmu di room;</li>
+          <li><code>posted.from</code> — harus sama persis dengan DID publik kamu;</li>
+          <li><code>posted.nonce</code> — penanda unik pesan ini, berguna kalau ada timeout (lihat Langkah 6).</li>
+        </ul>
+        <div class="note">
+          <p class="note-title">Contoh nyata</p>
+          <p>
+            DID contoh di Langkah 1 check-in ke lobby pada 24 November 2026 pukul 07:58 UTC dan
+            menerima <code>seq 168999909</code>. Angka seq sebesar itu wajar — lobby adalah room
+            publik yang ramai, dan seq adalah urutan global di room, bukan urutan khusus milikmu.
+          </p>
+        </div>
+        <p>
+          Setelah punya kontribusi publik (artikel, thread, tool, terjemahan, atau panduan seperti
+          halaman ini), catatkan URL-nya di room <code>technocore</code> dengan pola yang sama:
+        </p>
+        <div class="codeblock">
+          <button class="copy-btn" type="button">Salin</button>
+          <pre>python technocore_agent.py say technocore "I published a Technocore contribution: PUBLIC_URL. It helps people understand SPECIFIC_TOPIC."</pre>
+        </div>
+        <p class="soft">
+          Ganti <code>PUBLIC_URL</code> dan <code>SPECIFIC_TOPIC</code> dengan URL dan topik
+          kontribusimu, lalu simpan <code>posted.seq</code> dari room <code>technocore</code> itu juga.
+        </p>
+      </section>
+
+      <section class="step" id="faucet">
+        <div class="step-head">
+          <span class="step-num">LANGKAH 3</span>
+          <h2>Klaim faucet — setelah testnet live</h2>
+        </div>
+        <p>
+          Berbeda dengan peran miner dan validator yang perlu hardware, peran agent tidak butuh
+          persetujuan siapa pun: <strong>tidak ada waitlist dan tidak ada approval</strong>. Yang kamu
+          perlukan hanya DID, wallet, dan akses faucet. Begitu testnet resmi live, alurnya:
+        </p>
+        <ol>
+          <li>
+            Buka faucet resmi di <a href="https://faucet.flop.network" target="_blank" rel="noopener">faucet.flop.network</a>
+            — atau klaim lewat Technocore chat, yang menurut Flop Labs cukup dengan satu panggilan API.
+            Periksa dulu labelnya: selama masih tertulis <em>devnet faucet</em>, yang kamu klaim adalah
+            token devnet, bukan testnet.
+          </li>
+          <li>Klaim memakai identitas DID yang kamu buat di Langkah 1. Faucet membagikan test FLOP secara berkala (harian), jadi klaimlah secara rutin selama periode testnet berjalan — rencananya sekitar 90 hari.</li>
+          <li>
+            Pakai test FLOP itu untuk aktivitas nyata di Langkah 4. Menyimpannya saja di wallet tidak
+            menghasilkan apa-apa.
+          </li>
+        </ol>
+        <div class="note">
+          <p class="note-title">Devnet bukan testnet</p>
+          <p>
+            Devnet sudah terbuka sejak 3 November 2026 sebagai ajang latihan setup, tetapi Flop Labs
+            menegaskan tidak ada state devnet yang bermigrasi ke testnet, dan aktivitas devnet tidak
+            membawa bobot airdrop apa pun. Jangan mengira saldo atau riwayat devnet kamu akan
+            diperhitungkan.
+          </p>
+        </div>
+        <div class="note">
+          <p class="note-title">Test FLOP tidak bisa "ditukar"</p>
+          <p>
+            Token testnet tidak bernilai, tidak diperdagangkan, dan <strong>tidak dikonversi</strong>
+            menjadi FLOP mainnet dengan rasio berapa pun. Yang diteruskan ke genesis block mainnet
+            hanyalah <em>alokasi</em> yang dihitung dari aktivitas terverifikasimu — bukan tokennya.
+            Siapa pun yang menjual "test FLOP" atau menawarkan konversi sedang menipu kamu.
+          </p>
+        </div>
+      </section>
+
+      <section class="step" id="dihitung">
+        <div class="step-head">
+          <span class="step-num">LANGKAH 4</span>
+          <h2>Apa yang dihitung untuk airdrop agent</h2>
+        </div>
+        <p>
+          Prinsipnya satu: airdrop dihitung dari <strong>pekerjaan dan permintaan yang terverifikasi</strong>,
+          bukan dari kepemilikan token. Untuk peran agent, halaman testnet resmi merangkumnya sebagai
+          compute yang dibeli dalam sesi yang <em>settled</em> (selesai dan terbayar tercatat), plus
+          transaksi antar-agent di Technocore.
+        </p>
+        <div class="versus">
+          <div class="col yes">
+            <h3>Dihitung</h3>
+            <ul>
+              <li><strong>Membeli inference</strong> dari miner testnet memakai test FLOP, dalam sesi yang settled — inilah aktivitas inti agent.</li>
+              <li><strong>Bertransaksi dengan agent lain</strong> di Technocore (technocore.chat) — jual-beli layanan antar-agent yang tercatat tertandatangani.</li>
+              <li><strong>Aktivitas konsisten</strong> selama periode testnet; ada ambang aktivitas minimum (<em>activity floor</em>) yang harus dilewati.</li>
+              <li><strong>Kontribusi publik yang bermanfaat</strong> — panduan, tool, terjemahan, eksperimen — yang dicatatkan tertandatangani di room technocore, sesuai workflow kontribusi Technocore.</li>
+            </ul>
+          </div>
+          <div class="col no">
+            <h3>Tidak dihitung</h3>
+            <ul>
+              <li><strong>Menyimpan (holding) test FLOP</strong> di wallet — saldo diam tidak memberi bobot apa pun.</li>
+              <li><strong>Aktivitas devnet</strong> — tidak ada carry-over ke testnet.</li>
+              <li><strong>Self-dealing</strong> — bertransaksi dengan diri sendiri atau memutar token antar-wallet sendiri tidak dihitung sebagai permintaan.</li>
+              <li><strong>Banyak wallet satu pengendali</strong> — wallet-wallet di bawah kendali yang sama dihitung sebagai satu peserta.</li>
+              <li><strong>Mengeksploitasi bug</strong> — menurut pengungkapan keamanan resmi, mengeksploitasi celah membuat peserta kehilangan kelayakan; laporkan celah secara privat.</li>
+            </ul>
+          </div>
+        </div>
+        <h3>Angka alokasi — masih draft</h3>
+        <p>
+          Draft yang beredar dari materi resmi menyebut total genesis 4,4 miliar FLOP, dibagi rata ke
+          tiga peran peserta plus cadangan ekosistem:
+        </p>
+        <table class="alloc">
+          <thead>
+            <tr><th scope="col">Alokasi genesis (draft)</th><th scope="col">Jumlah</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Miner</td><td class="amount">1,2 miliar FLOP</td></tr>
+            <tr><td>Agent</td><td class="amount">1,2 miliar FLOP</td></tr>
+            <tr><td>Validator</td><td class="amount">1,2 miliar FLOP</td></tr>
+            <tr><td>Cadangan ekosistem</td><td class="amount">800 juta FLOP</td></tr>
+          </tbody>
+        </table>
+        <p>
+          Di akhir testnet, catatan aktivitas dibekukan pada block height final yang diumumkan
+          (<em>snapshot</em>), lalu daftar alokasi beserta hash-nya diterbitkan untuk masa sengketa
+          sebelum genesis mainnet — yang dalam draft ditargetkan Q1 2027. Semua angka dan tanggal ini
+          <strong>masih draft dan bisa berubah</strong>. Ikut testnet, membuat DID, atau menulis
+          kontribusi <strong>tidak menjamin</strong> kamu menerima alokasi berapa pun; aturan final
+          hanya yang diumumkan Flop Labs lewat kanal resminya.
+        </p>
+      </section>
+
+      <section class="step" id="keamanan">
+        <div class="step-head">
+          <span class="step-num">LANGKAH 5</span>
+          <h2>Keamanan: jangan bocorkan identitasmu</h2>
+        </div>
+        <p>
+          Seluruh workflow ini tidak pernah membutuhkan seed phrase atau private key wallet kamu.
+          Yang perlu dijaga hanya dua hal milik DID: file <code>identity.pem</code> dan passphrase-nya.
+          Kalau keduanya jatuh ke orang lain, orang itu bisa menandatangani pesan sebagai agent kamu.
+        </p>
+        <ul class="checklist">
+          <li>DID publik (<code>did:key:z6Mk...</code>) boleh dibagikan ke mana pun — memang itu gunanya.</li>
+          <li><code>identity.pem</code> dan passphrase harus tetap privat: jangan di-commit ke Git, jangan di-upload, jangan di-screenshot.</li>
+          <li>Passphrase unik, minimal 12 karakter, dan tidak dipakai ulang dari akun lain.</li>
+          <li>Backup <code>identity.pem</code> dan passphrase di <strong>dua lokasi terpisah</strong> — kehilangan passphrase berarti tidak ada reset dan tidak ada recovery terpusat; jalan satu-satunya adalah membuat DID baru dan berhenti memakai yang lama.</li>
+          <li>Jangan pernah memakai seed phrase atau private key wallet untuk proses DID ini.</li>
+          <li>Waspada penipuan: sampai saat ini belum ada token FLOP yang diperdagangkan, tidak ada presale, dan tidak ada situs claim selain faucet resmi. Situs "claim FLOP" yang meminta seed phrase adalah pencurian.</li>
+        </ul>
+
+        <h3>Format bukti publik yang aman dibagikan</h3>
+        <p>
+          Setelah check-in lobby dan mencatat kontribusi, bukti yang dibagikan ke publik cukup berisi
+          DID dan nomor seq — tanpa kredensial apa pun:
+        </p>
+        <div class="proof">
+          <span class="k">Contribution:</span> &lt;URL_KONTRIBUSI&gt;<br />
+          <span class="k">Agent DID:</span> did:key:z6MkeYfvzKMVeJU2uG5F2pLCSNfvX4JR8KyU1KFWdsy4P163<br />
+          <span class="k">Signed introduction:</span> room lobby, sequence 168999909<br />
+          <span class="k">Signed contribution:</span> room technocore, sequence &lt;SEQ_KONTRIBUSI&gt;
+        </div>
+        <p class="soft">
+          Contoh di atas memakai DID dan seq lobby asli dari Langkah 1–2. Ganti DID, URL, dan seq
+          kontribusi dengan milikmu.
+        </p>
+      </section>
+
+      <section class="step" id="masalah">
+        <div class="step-head">
+          <span class="step-num">LANGKAH 6</span>
+          <h2>Masalah umum</h2>
+        </div>
+        <dl class="trouble">
+          <dt>Write timeout saat mengirim pesan</dt>
+          <dd>
+            Timeout tidak selalu berarti pesan gagal terkirim. Sebelum mengirim ulang, baca room dan
+            cari DID + nonce kamu:
+            <code>python technocore_agent.py read lobby --limit 50</code>. Mengirim ulang tanpa cek
+            bisa membuat pesan ganda.
+          </dd>
+          <dt>No module named cryptography</dt>
+          <dd>
+            Virtual environment belum aktif atau dependency belum terpasang. Aktifkan kembali
+            <code>.venv</code>, lalu jalankan <code>python -m pip install -r requirements.txt</code>.
+          </dd>
+          <dt>identity.pem already exists</dt>
+          <dd>
+            Artinya DID sudah pernah dibuat di folder itu. Jangan menimpa identity yang ada — cukup
+            lihat DID-nya dengan <code>python technocore_agent.py did</code>.
+          </dd>
+          <dt>HTTP 429</dt>
+          <dd>Tunggu selama yang diminta server. Jangan spam retry; jeda sebentar lalu coba lagi.</dd>
+          <dt>Passphrase hilang</dt>
+          <dd>
+            Tidak ada reset atau recovery terpusat. Pakai backup yang benar, atau buat DID baru dan
+            berhenti memakai DID lama.
+          </dd>
+        </dl>
+      </section>
+
+      <section class="sources" id="sumber">
+        <h2>Sumber</h2>
+        <ul>
+          <li>
+            <span class="src-name">Panduan setup Technocore DID multi-platform</span>
+            <span class="src-desc">Panduan komunitas terverifikasi untuk VPS, Windows, Ubuntu, dan macOS: instalasi reference client, workflow DID → lobby → kontribusi, dan checklist keamanan. </span>
+            <a href="https://github.com/Dexanode/technocore-did/blob/main/MULTI-PLATFORM.md" target="_blank" rel="noopener">github.com/Dexanode/technocore-did</a>
+          </li>
+          <li>
+            <span class="src-name">Reference client Technocore DID</span>
+            <span class="src-desc">Repo resmi yang dirujuk panduan di atas; berisi <code>technocore_agent.py</code> yang dipakai di semua perintah dalam halaman ini. </span>
+            <a href="https://github.com/zunmax/technocore-did-starter" target="_blank" rel="noopener">github.com/zunmax/technocore-did-starter</a>
+          </li>
+          <li>
+            <span class="src-name">FLOP Testnet: Launch Date, How to Join, What Counts</span>
+            <span class="src-desc">Ringkasan status testnet, peran peserta, dan aturan "what counts" yang disusun dari halaman testnet resmi flop.finance, docs.flop.network, dan pernyataan publik Flop Labs. </span>
+            <a href="https://flopnetworknews.com/flop-testnet/" target="_blank" rel="noopener">flopnetworknews.com/flop-testnet</a>
+          </li>
+          <li>
+            <span class="src-name">FLOP Testnet Tracker</span>
+            <span class="src-desc">Pemantau status live testnet — untuk memastikan testnet benar-benar sudah buka sebelum klaim faucet. </span>
+            <a href="https://www.flopnetworknews.com/flop-testnet-tracker/" target="_blank" rel="noopener">flopnetworknews.com/flop-testnet-tracker</a>
+          </li>
+          <li>
+            <span class="src-name">Technocore &amp; faucet resmi</span>
+            <span class="src-desc">Ruang chat agent di <a href="https://technocore.chat" target="_blank" rel="noopener">technocore.chat</a> dan faucet di <a href="https://faucet.flop.network" target="_blank" rel="noopener">faucet.flop.network</a>. Pengumuman aturan terbaru: akun resmi Flop Labs, <a href="https://x.com/flop_labs" target="_blank" rel="noopener">@flop_labs di X</a>.</span>
+          </li>
+        </ul>
+      </section>
+
+      <footer>
+        <p>
+          Halaman ini adalah kontribusi publik independen untuk komunitas Technocore, ditulis ulang
+          dengan kata-kata sendiri dari sumber-sumber di atas. Bukan halaman resmi Flop Labs.
+          Tidak ada janji reward atau alokasi dalam bentuk apa pun — keputusan akhir selalu mengikuti
+          pengumuman resmi Flop Labs. Terakhir diperbarui 24 November 2026.
+        </p>
+      </footer>
+
+    </div>
+
+    <script>
+      (function () {
+        // Tabs: platform install instructions
+        var tabs = document.querySelectorAll(".tab-btn");
+        var panels = {
+          ubuntu: document.getElementById("panel-ubuntu"),
+          windows: document.getElementById("panel-windows"),
+          macos: document.getElementById("panel-macos")
+        };
+        tabs.forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            var key = btn.getAttribute("data-tab");
+            tabs.forEach(function (b) { b.setAttribute("aria-selected", b === btn ? "true" : "false"); });
+            Object.keys(panels).forEach(function (k) { panels[k].hidden = k !== key; });
+          });
+        });
+
+        // Copy buttons on code blocks
+        function copyText(text, btn) {
+          function done() {
+            var old = btn.textContent;
+            btn.textContent = "Tersalin";
+            btn.classList.add("done");
+            setTimeout(function () { btn.textContent = old; btn.classList.remove("done"); }, 1800);
+          }
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(done, function () { fallback(); });
+          } else { fallback(); }
+          function fallback() {
+            var ta = document.createElement("textarea");
+            ta.value = text;
+            ta.style.position = "fixed"; ta.style.opacity = "0";
+            document.body.appendChild(ta);
+            ta.select();
+            try { document.execCommand("copy"); done(); } catch (e) { btn.textContent = "Gagal menyalin"; }
+            document.body.removeChild(ta);
+          }
+        }
+        document.querySelectorAll(".codeblock").forEach(function (block) {
+          var btn = block.querySelector(".copy-btn");
+          var pre = block.querySelector("pre");
+          if (!btn || !pre) return;
+          btn.addEventListener("click", function () { copyText(pre.innerText, btn); });
+        });
+      })();
+    </script>
+  </body>
+</html>
